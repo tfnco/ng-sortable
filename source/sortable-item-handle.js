@@ -132,6 +132,7 @@
               element.unbind('mouseup', unbindMoveListen);
               element.unbind('touchend', unbindMoveListen);
               element.unbind('touchcancel', unbindMoveListen);
+              scope.element.parent().unbind('touchmove', preventScroll);
             };
 
             var startPosition;
@@ -144,6 +145,7 @@
               if (Math.abs(eventObj.clientX - startPosition.clientX) + Math.abs(eventObj.clientY - startPosition.clientY) > 10) {
                 unbindMoveListen();
                 dragStart(event);
+                scope.element.parent().bind('touchmove', preventScroll);
               }
             };
 
@@ -563,9 +565,15 @@
            */
           longTouchStart = function(event) {
             longTouchTimer = $timeout(function() {
+              scope.element.parent().unbind('touchmove', preventScroll);
+              scope.element.parent().bind('touchmove', preventScroll);
               dragListen(event);
             }, 500);
           };
+
+          function preventScroll(event) {
+            event.preventDefault();
+          }
 
           /**
            * cancel the long touch and its timer.
