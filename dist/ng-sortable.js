@@ -621,6 +621,7 @@
             unBindEvents,//unbind the drag events.
             hasTouch,// has touch support.
             isIOS,// is iOS device.
+            isChrome,// is iOS device.
             longTouchStart, // long touch start event
             longTouchCancel, // cancel long touch
             longTouchTimer, // timer promise for the long touch on iOS devices
@@ -633,6 +634,7 @@
 
           hasTouch = 'ontouchstart' in $window;
           isIOS = /iPad|iPhone|iPod/.test($window.navigator.userAgent) && !$window.MSStream;
+          isChrome = /Chrome/.test($window.navigator.userAgent) && !$window.MSStream;
 
           if (sortableConfig.handleClass) {
             element.addClass(sortableConfig.handleClass);
@@ -1087,7 +1089,7 @@
           bindDrag = function () {
             if (hasTouch) {
               if (isLongTouch) {
-                if (isIOS) {
+                if (isIOS || isChrome) {
                   element.bind('touchstart', longTouchStart);
                   element.bind('touchend', longTouchCancel);
                   element.bind('touchmove', longTouchCancel);
